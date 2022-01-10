@@ -1,4 +1,4 @@
-module github.com/zouyx/agollo_demo
+module agollo_demo
 
 require (
 	github.com/apolloconfig/agollo/v4 v4.0.11

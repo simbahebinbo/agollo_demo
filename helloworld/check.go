@@ -9,63 +9,52 @@ import (
 
 func main() {
 	c := &config.AppConfig{
-		AppID:          "testApplication_yang",
-		Cluster:        "dev",
-		IP:             "http://106.54.227.205:8080",
-		NamespaceName:  "dubbo",
-		IsBackupConfig: true,
-		Secret:         "6ce3ff7e96a24335a9634fe9abca6d51",
+		AppID:         "zkdex-explorer",
+		Cluster:       "test-1",
+		IP:            "http://apollo-config.system-service.huobiapps.com",
+		NamespaceName: "application.properties",
 	}
 	agollo.SetLogger(&DefaultLogger{})
 
-	client,err:=agollo.StartWithConfig(func() (*config.AppConfig, error) {
+	client, err := agollo.StartWithConfig(func() (*config.AppConfig, error) {
 		return c, nil
 	})
 
-	if err!=nil{
+	if err != nil {
 		fmt.Println("err:", err)
 		panic(err)
 	}
 
-	checkKey(c.NamespaceName,client)
+	printKey(c.NamespaceName, client)
 
 	c = &config.AppConfig{
-		AppID:          "hk109",
-		Cluster:        "dev",
-		IP:             "http://106.54.227.205:8080",
-		NamespaceName:  "dubbo",
-		IsBackupConfig: false,
-		Secret:         "6ce3ff7e96a24335a9634fe9abca6d51",
+		AppID:         "zkdex-explorer",
+		Cluster:       "test-1",
+		IP:            "http://apollo-config.system-service.huobiapps.com",
+		NamespaceName: "zkdex-explorer-common.properties",
 	}
 
-
-	client,err=agollo.StartWithConfig(func() (*config.AppConfig, error) {
+	client, err = agollo.StartWithConfig(func() (*config.AppConfig, error) {
 		return c, nil
 	})
 
-	if err!=nil{
+	if err != nil {
 		fmt.Println("err:", err)
 		panic(err)
 	}
 
-	checkKey(c.NamespaceName,client)
+	printKey(c.NamespaceName, client)
 
 	time.Sleep(5 * time.Second)
 }
 
-func checkKey(namespace string,client agollo.Client) {
+func printKey(namespace string, client agollo.Client) {
 	cache := client.GetConfigCache(namespace)
-	count:=0
 	cache.Range(func(key, value interface{}) bool {
 		fmt.Println("key : ", key, ", value :", value)
-		count++
 		return true
 	})
-	if count<1{
-		panic("config key can not be null")
-	}
 }
-
 
 type DefaultLogger struct {
 }
